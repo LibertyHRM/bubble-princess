@@ -1,0 +1,208 @@
+name: Build Production Mode
+on:
+  push:
+    tags:
+      - 'pro-*'
+
+env:
+  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+  TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+  TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+  TELEGRAM_TOPIC_ID: 196
+  # ================= NEW FLOW
+  NO_FLIPPER: '1'
+  LANG: en_US.UTF-8
+  articles_length: 18
+  CACHE_DIR: $HOME/actions-runner/_workdir/cache/liberty-belink-hrm
+  # CHANGE BASE ON ENVIRONMENT
+  PRO_API_KEY_JSON: ${{secrets.PRO_API_KEY_JSON}}
+  FIREBASE_CLI_TOKEN: ${{secrets.PRO_FIREBASE_CLI_TOKEN}}
+  ANDROID_FIREBASE_ID: ${{secrets.PRO_ANDROID_FIREBASE_ID}}
+  PRO_GOOGLESERVICE_INFO_PLIST: ${{secrets.PRO_GOOGLESERVICE_INFO_PLIST}}
+  PRO_GOOGLE_SERVICES_JSON: ${{secrets.PRO_GOOGLE_SERVICES_JSON}}
+  PROD_RELEASE_KEYSTORE_BASE64: ${{secrets.PROD_RELEASE_KEYSTORE_BASE64}}
+  DYNAMIC_CONSTANTS_TS_PROD_BASE64: ${{secrets.DYNAMIC_CONSTANTS_TS_PROD_BASE64}}
+
+jobs:
+
+  build_ipa:
+    name: Build IOS
+    runs-on: [self-hosted, macos, dinosaur]
+    timeout-minutes: 60
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node Version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Select Xcode Version
+        continue-on-error: true
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.3'
+
+      - name: Unlock Keychain
+        shell: bash
+        run: security unlock-keychain -p admin
+
+      - name: Remove code-push
+        shell: bash
+        run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
+
+      - name: Install Node Modules
+        run: yarn install --frozen-lockfile
+
+      - name: Install Gems
+        run: bundle install
+
+      - name: Install CocodPods
+        shell: bash
+        run: bash scripts/cache/install_pods.sh
+
+      - name: Load Build Environments
+        shell: bash
+        run: bash scripts/load_build_environments.sh
+
+      - name: Load secret file
+        shell: bash
+        run: bash scripts/load_secret_file.sh
+
+      - name: Load Build Configurations
+        shell: bash
+        run: bash scripts/load_build_configure_prod.sh
+
+      - name: Change Logo App
+        shell: bash
+        run: yarn appicon:create
+
+      - name: Config App Version
+        run: bundle exec fastlane ios change_app_version
+
+      - name: Build IOS IPA
+        run: bundle exec fastlane ios build_ipa_prod
+
+      - name: Deploy ios
+        if: ${{ success() }}
+        shell: bash
+        run: bundle exec fastlane ios deploy_ipa_prod
+
+  build_android_apk:
+    name: Build Android APK
+    runs-on: [self-hosted, macos, dinosaur]
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node Version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Remove code-push
+        shell: bash
+        run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
+
+      - name: Install Node Modules
+        run: yarn install --frozen-lockfile
+
+      - name: Install Gems
+        run: bundle install
+
+      - name: Load Build Environments
+        shell: bash
+        run: bash scripts/load_build_environments.sh
+
+      - name: Load secret file
+        shell: bash
+        run: bash scripts/load_secret_file.sh
+
+      - name: Load Build Configurations
+        shell: bash
+        run: bash scripts/load_build_configure_prod.sh
+
+      - name: Change Logo App
+        shell: bash
+        run: yarn appicon:create
+
+      - name: Change App Version
+        run: bundle exec fastlane android change_app_version
+
+      - name: Build Android APK
+        run: bundle exec fastlane android build_apk_prod
+
+      - name: Deploy Android APK
+        if: ${{ success() }}
+        run: bundle exec fastlane android deploy_apk_prod
+
+  build_android_aab:
+    name: Build Android AAB
+    runs-on: [self-hosted, macos, dinosaur]
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node Version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Remove code-push
+        shell: bash
+        run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
+
+      - name: Install Node Modules
+        run: yarn install --frozen-lockfile
+
+      - name: Install Gems
+        run: bundle install
+
+      - name: Load Build Environments
+        shell: bash
+        run: bash scripts/load_build_environments.sh
+
+      - name: Load secret file
+        shell: bash
+        run: bash scripts/load_secret_file.sh
+
+      - name: Load Build Configurations
+        shell: bash
+        run: bash scripts/load_build_configure_prod.sh
+
+      - name: Change Logo App
+        shell: bash
+        run: yarn appicon:create
+
+      - name: Change App Version
+        run: bundle exec fastlane android change_app_version
+
+      - name: Build Android AAB
+        run: bundle exec fastlane android build_aab_prod
+
+      # - name: Deploy Android AAB
+      #   if: ${{ success() }}
+      #   run: bundle exec fastlane android deploy_aab_prod
+      - name: Backup FILE AAB
+        run: bash scripts/backup_build.sh aab
+        env:
+          LANG: en_US.UTF-8
