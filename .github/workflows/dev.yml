@@ -1,8 +1,8 @@
 name: Build Staging Mode
 on:
-  push:
-    tags:
-      - "dev-*"
+  repository_dispatch:
+    types:
+      - dev-*
 
 env:
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
