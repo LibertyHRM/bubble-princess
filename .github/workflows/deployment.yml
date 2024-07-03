@@ -2,7 +2,10 @@ name: Bubble Princess
 on:
   repository_dispatch:
     types:
+      - ppap
       - dev-*
+      - stg-*
+      - pro-*
 
 env:
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -10,6 +13,7 @@ env:
   TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
   # ================= NEW FLOW
   NO_FLIPPER: "1"
+  LC_ALL: en_US.UTF-8
   LANG: en_US.UTF-8
   # ENVIRONMENT OF REPO
   REF_NAME: ${{ github.event.client_payload.ref_name }}
