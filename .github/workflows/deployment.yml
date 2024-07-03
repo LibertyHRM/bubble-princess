@@ -1,4 +1,4 @@
-name: Build Staging Mode
+name: Bubble Princess
 on:
   repository_dispatch:
     types:
