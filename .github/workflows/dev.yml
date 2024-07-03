@@ -15,6 +15,7 @@ env:
   REF_NAME: ${{ github.event.client_payload.ref_name }}
   TRIGGERING_ACTOR: ${{ github.event.client_payload.triggering_actor }}
   MAIN_REPOSITORY: ${{ secrets.CUCU_REPOSITORY }}
+  P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
   # CHANGE BASE ON ENVIRONMENT
   API_KEY_JSON: ${{secrets.DEV_API_KEY_JSON}}
   FIREBASE_CLI_TOKEN: ${{secrets.DEV_FIREBASE_CLI_TOKEN}}
@@ -142,9 +143,9 @@ jobs:
           - name: "ubuntu-22.04"
             platform: "ANDROID"
             format: APK
-          - name: "ubuntu-22.04"
-            platform: "ANDROID"
-            format: AAB
+          # - name: "ubuntu-22.04"
+          #   platform: "ANDROID"
+          #   format: AAB
 
     runs-on: ${{ matrix.name }}
     needs: [init, prepare]
@@ -260,15 +261,15 @@ jobs:
 
       - name: Build APK
         if: matrix.format == 'APK'
-        uses: borales/actions-yarn@v5
+        uses: maierj/fastlane-action@v3.1.0
         with:
-          cmd: android build_apk_dev --warning-mode all
+          lane: "android build_apk_dev"
 
       - name: Build AAB
         if: matrix.format == 'AAB'
-        uses: borales/actions-yarn@v5
+        uses: maierj/fastlane-action@v3.1.0
         with:
-          cmd: release:play
+          lane: "android build_aab_prod"
 
       # NOTE: deploy
       # - name: Deploy ipa
