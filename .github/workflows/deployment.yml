@@ -52,7 +52,6 @@ jobs:
             MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
           fi
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
-
       - name: Set env
         id: set-env
         run: |
@@ -63,7 +62,6 @@ jobs:
             ENV='stg'
           fi
           echo "value=$ENV" >> $GITHUB_OUTPUT
-
       - name: Generate message
         id: get-message-information
         run: |
@@ -76,7 +74,6 @@ jobs:
           echo "tag-source: $REF_NAME"
           echo "matrix: ${{ steps.set-matrix.outputs.value }}"
           echo "env: ${{ steps.set-env.outputs.value }}"
-
       - name: Send telegram message
         if: vars.IS_SILENT != 'true'
         uses: PacificPromise/macos-telegram-action@main
