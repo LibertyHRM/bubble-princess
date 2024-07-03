@@ -33,7 +33,7 @@ jobs:
     outputs:
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
-      matrix: ${{ steps.get-message-information.outputs.value }}
+      matrix-info: ${{ steps.get-message-information.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -107,9 +107,11 @@ jobs:
       - name: Log values
         run: |
           echo "tag-source: $REF_NAME"
-          echo "matrix: ${{ needs.init.outputs.matrix }}"
-          echo "matrix: ${{ needs.init.outputs.env }}"
+          echo "matrix: ${{ needs.init.outputs.matrix-info }}"
+          echo "env: ${{ needs.init.outputs.env }}"
           echo "message-information: ${{ needs.init.outputs.message-information }}"
+          echo "matrix: ${{ needs.init.outputs.matrix-info }}"
+
       - name: Setup Node v18
         uses: actions/setup-node@v4
         with:
