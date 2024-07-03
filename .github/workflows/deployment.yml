@@ -52,7 +52,7 @@ jobs:
         run: |
           ENV='dev'
           if [[ "$REF_NAME" =~ "pro" ]]; then
-            ENV='pro'
+            ENV='prod'
           elif [[ "$REF_NAME" =~ "stg" ]]; then
             ENV='stg'
           fi
@@ -160,10 +160,10 @@ jobs:
           ref: ${{ github.event.client_payload.ref_name}}
 
       # NOTE: setup environment
-      - name: Setup ruby 3.2.2
+      - name: Setup ruby 3.0.0
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2.2"
+          ruby-version: "3.0.0"
           bundler-cache: true
 
       - name: Setup Node v18
