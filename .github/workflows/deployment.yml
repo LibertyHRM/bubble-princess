@@ -279,12 +279,17 @@ jobs:
         with:
           lane: ios deploy_ipa_${{ needs.init.outputs.env }}
 
-      - name: Deploy APK to firebase
-        if: matrix.format == 'APK'
-        uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: android deploy_apk_${{ needs.init.outputs.env }}
+      # - name: Deploy APK to firebase
+      #   if: matrix.format == 'APK'
+      #   uses: maierj/fastlane-action@v3.1.0
+      #   with:
+      #     lane: android deploy_apk_${{ needs.init.outputs.env }}
 
+      - name: Build APK
+        if: matrix.format == 'APK'
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: cd android && ./gradlew assembleDevelopmentRelease --warning-mode all
       # - name: Deploy AAB to playstore
       #   if: matrix.format == 'AAB'
       #   uses: maierj/fastlane-action@v3.1.0
