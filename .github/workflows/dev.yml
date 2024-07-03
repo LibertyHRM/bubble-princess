@@ -170,12 +170,14 @@ jobs:
           node-version-file: ".nvmrc"
 
       - name: Setup JDK 11
+        if: matrix.platform == 'ANDROID'
         uses: actions/setup-java@v2
         with:
           java-version: 11
           distribution: "temurin"
 
       - name: Setup Android SDK
+        if: matrix.platform == 'ANDROID'
         uses: android-actions/setup-android@v2
 
       - name: Setup Android NDK
