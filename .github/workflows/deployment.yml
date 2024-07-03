@@ -4,9 +4,6 @@ on:
     types:
       - ppap
       - dev-*
-      - stg-*
-      - pro-*
-
 env:
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_GROUP_ID }}
