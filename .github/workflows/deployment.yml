@@ -28,8 +28,8 @@ jobs:
     runs-on: macos-14
     outputs:
       # message-information: ${{ steps.get-message-information.outputs.value }}
-      # env: ${{ steps.set-env.outputs.value }}
-      matrix: ${{ steps.set-matrix.outputs.value }}
+      env: ${{ steps.set-env.outputs.value }}
+      matrix_value: ${{ steps.set-matrix.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,21 +42,18 @@ jobs:
         id: set-matrix
         run: |
           MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
-          if [[ "$REF_NAME" =~ "pro" ]]; then
-            MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
-          fi
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
 
-      # - name: Set env
-      #   id: set-env
-      #   run: |
-      #     ENV='dev'
-      #     if [[ "$REF_NAME" =~ "pro" ]]; then
-      #       ENV='prod'
-      #     elif [[ "$REF_NAME" =~ "stg" ]]; then
-      #       ENV='stg'
-      #     fi
-      #     echo "value=$ENV" >> $GITHUB_OUTPUT
+      - name: Set env
+        id: set-env
+        run: |
+          ENV='dev'
+          if [[ "$REF_NAME" =~ "pro" ]]; then
+            ENV='prod'
+          elif [[ "$REF_NAME" =~ "stg" ]]; then
+            ENV='stg'
+          fi
+          echo "value=$ENV" >> $GITHUB_OUTPUT
 
       - name: Generate message
         id: get-message-information
@@ -103,7 +100,7 @@ jobs:
       - name: Log value
         run: |
           echo "tag-source: $REF_NAME"
-          echo "matrix: ${{ needs.init.outputs.matrix }}"
+          echo "matrix: ${{ needs.init.outputs.matrix_value }}"
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
