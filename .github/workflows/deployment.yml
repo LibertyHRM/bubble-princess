@@ -16,10 +16,11 @@ env:
   TRIGGERING_ACTOR: ${{ github.event.client_payload.triggering_actor }}
   MAIN_REPOSITORY: ${{ secrets.CUCU_REPOSITORY }}
   P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-  # CHANGE BASE ON ENVIRONMENT
+  PRO_API_KEY_JSON: ${{secrets.PRO_API_KEY_JSON}}
   API_KEY_JSON: ${{secrets.DEV_API_KEY_JSON}}
   FIREBASE_CLI_TOKEN: ${{secrets.DEV_FIREBASE_CLI_TOKEN}}
   SSH_PRIVATE_KEY_SDK_CORE_CLIENT: ${{secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT}}
+  DYNAMIC_CONSTANTS_TS_PROD_BASE64: ${{secrets.DYNAMIC_CONSTANTS_TS_PROD_BASE64}}
 
 jobs:
   init:
@@ -207,6 +208,10 @@ jobs:
           path: node_modules
           key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
 
+      - name: Remove code-push
+        shell: bash
+        run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
+
       - name: Cache Pods
         if: matrix.platform == 'IOS'
         id: cache-pods
@@ -257,13 +262,13 @@ jobs:
         if: matrix.format == 'IPA'
         uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "ios build_ipa_dev"
+          lane: "ios build_ipa_${{ needs.init.outputs.env }}"
 
       - name: Build APK
         if: matrix.format == 'APK'
         uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "android build_apk_dev"
+          lane: "android build_apk_${{ needs.init.outputs.env }}"
 
       - name: Build AAB
         if: matrix.format == 'AAB'
@@ -272,17 +277,17 @@ jobs:
           lane: "android build_aab_prod"
 
       # NOTE: deploy
-      # - name: Deploy ipa
-      #   if: matrix.format == 'IPA'
-      #   uses: maierj/fastlane-action@v3.1.0
-      #   with:
-      #     lane: ios testflight
+      - name: Deploy ipa
+        if: matrix.format == 'IPA'
+        uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: ios deploy_ipa_${{ needs.init.outputs.env }}
 
-      # - name: Deploy APK to firebase
-      #   if: matrix.format == 'APK'
-      #   uses: maierj/fastlane-action@v3.1.0
-      #   with:
-      #     lane: android beta
+      - name: Deploy APK to firebase
+        if: matrix.format == 'APK'
+        uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: android deploy_apk_${{ needs.init.outputs.env }}
 
       # - name: Deploy AAB to playstore
       #   if: matrix.format == 'AAB'
