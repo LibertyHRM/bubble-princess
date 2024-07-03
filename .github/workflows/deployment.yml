@@ -101,6 +101,7 @@ jobs:
         run: |
           echo "tag-source: $REF_NAME"
           echo "matrix: ${{ needs.init.outputs.matrix_value }}"
+          echo "env: ${{ needs.init.outputs.env }}"
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
