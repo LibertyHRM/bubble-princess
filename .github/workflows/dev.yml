@@ -136,10 +136,16 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          [
-            { format:"IPA", name:"macos-14", platform:"IOS" },
-            { format:"APK", name:"ubuntu-22.04", platform:"ANDROID" },
-          ]
+          - name: "macos-14"
+            platform: "IOS"
+            format: IPA
+          - name: "ubuntu-22.04"
+            platform: "ANDROID"
+            format: APK
+          - name: "ubuntu-22.04"
+            platform: "ANDROID"
+            format: AAB
+
     runs-on: ${{ matrix.name }}
     needs: [init, prepare]
     timeout-minutes: 60
