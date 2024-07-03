@@ -41,7 +41,7 @@ jobs:
       - name: Set matrix
         id: set-matrix
         run: |
-          MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+          MATRIX='123'
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
 
       - name: Set env
