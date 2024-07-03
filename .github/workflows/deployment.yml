@@ -27,7 +27,7 @@ jobs:
     name: Init
     runs-on: macos-14
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.value }}
+      matrix: '[{"format":"IPA","name":"macos-14","platform":"IOS"},{"format":"APK","name":"ubuntu-22.04","platform":"ANDROID"}]'
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
     steps:
@@ -103,7 +103,8 @@ jobs:
       - name: Log value
         run: |
           echo "tag-source: $REF_NAME"
-          echo "matrix: ${{needs.init.outputs.matrix }}"
+          echo "matrix: ${{ needs.init.outputs.matrix }}"
+          echo "matrix: ${{ needs.init.outputs.env }}"
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
