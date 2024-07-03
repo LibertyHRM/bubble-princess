@@ -26,7 +26,7 @@ env:
   PRO_GOOGLE_SERVICES_JSON: ${{ secrets.CUCU_PRO_GOOGLE_SERVICES_JSON }}
   PRO_GOOGLESERVICE_INFO_PLIST: ${{ secrets.CUCU_PRO_GOOGLESERVICE_INFO_PLIST }}
   SSH_PRIVATE_KEY_SDK_CORE_CLIENT: ${{ secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT }}
-
+  FIREBASE_CLI_TOKEN: ${{ secrets.PRO_FIREBASE_CLI_TOKEN }}
 jobs:
   init:
     name: Init
@@ -284,8 +284,6 @@ jobs:
         uses: maierj/fastlane-action@v3.1.0
         with:
           lane: android deploy_apk_${{ needs.init.outputs.env }}
-        env:
-          FIREBASE_CLI_TOKEN: ${{secrets.PRO_FIREBASE_CLI_TOKEN}}
 
       # - name: Deploy AAB to playstore
       #   if: matrix.format == 'AAB'
