@@ -29,7 +29,7 @@ jobs:
     outputs:
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
-      matrix: ${{ steps.get-matrix.outputs.value }}
+      matrix: "123"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,11 +38,11 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           ref: ${{ github.event.client_payload.ref_name}}
 
-      - name: Set env
+      - name: Set matrix
         id: get-matrix
         run: |
           MATRIX='123'
-          echo "value=$MATRIX" >> $GITHUB_OUTPUT
+          echo "value=hello" >> "$GITHUB_OUTPUT"
 
       - name: Set env
         id: set-env
