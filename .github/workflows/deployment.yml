@@ -100,6 +100,11 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           ref: ${{ github.event.client_payload.ref_name}}
 
+      - name: Log value
+        run: |
+          echo "tag-source: $REF_NAME"
+          echo "matrix: ${{needs.init.outputs.matrix }}"
+
       - name: Setup Node v18
         uses: actions/setup-node@v4
         with:
