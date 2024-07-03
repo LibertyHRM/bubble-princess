@@ -72,12 +72,12 @@ jobs:
           echo "message-information: ${{ steps.get-message-information.outputs.value }}"
           echo "env: ${{ steps.set-env.outputs.value }}"
 
-      # - name: Send telegram message
-      #   if: vars.IS_SILENT != 'true'
-      #   uses: PacificPromise/macos-telegram-action@main
-      #   with:
-      #     type: topic
-      #     message: "🎬 -  Start build: ${{ steps.get-message-information.outputs.value }}"
+      - name: Send telegram message
+        if: vars.IS_SILENT != 'true'
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: "🎬 -  Start build: ${{ steps.get-message-information.outputs.value }}"
 
   prepare:
     name: Prepare ${{ matrix.platform  }}
@@ -124,12 +124,12 @@ jobs:
         with:
           cmd: install --network-concurrency 1
 
-      # - name: Send telegram message failure
-      #   if: ${{ failure() && vars.IS_SILENT != 'true' }}
-      #   uses: PacificPromise/macos-telegram-action@main
-      #   with:
-      #     type: topic
-      #     message: "💥 - Failure ${{ matrix.platform }}: ${{ needs.init.outputs.message-information }}"
+      - name: Send telegram message failure
+        if: ${{ failure() && vars.IS_SILENT != 'true' }}
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: "💥 - Failure ${{ matrix.platform }}: ${{ needs.init.outputs.message-information }}"
 
   deploy:
     name: Deployment ${{ matrix.format }}
@@ -296,16 +296,16 @@ jobs:
       #   with:
       #     lane: android upload_to_open_testing_play_store
 
-      # - name: Send telegram message
-      #   if: vars.IS_SILENT != 'true'
-      #   uses: PacificPromise/macos-telegram-action@main
-      #   with:
-      #     type: topic
-      #     message: "✅ - Success ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}"
+      - name: Send telegram message
+        if: vars.IS_SILENT != 'true'
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: "✅ - Success ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}"
 
-      # - name: Send telegram message failure
-      #   if: ${{ failure() && vars.IS_SILENT != 'true' }}
-      #   uses: PacificPromise/macos-telegram-action@main
-      #   with:
-      #     type: topic
-      #     message: "💥 - Failure ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}"
+      - name: Send telegram message failure
+        if: ${{ failure() && vars.IS_SILENT != 'true' }}
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: "💥 - Failure ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}"
