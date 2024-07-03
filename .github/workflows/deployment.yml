@@ -29,7 +29,7 @@ jobs:
     outputs:
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
-      matrix: ${{ steps.set-matrix.outputs.value }}
+      matrix: "123"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -100,10 +100,11 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           ref: ${{ github.event.client_payload.ref_name}}
 
-      - name: Log value
+      - name: Log values
         run: |
           echo "tag-source: $REF_NAME"
           echo "matrix: ${{ needs.init.outputs.matrix }}"
+          echo "matrix: ${{ needs.init.outputs.env }}"
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
