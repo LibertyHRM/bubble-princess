@@ -29,7 +29,7 @@ jobs:
     outputs:
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
-      matrix: "123"
+      matrix: ${{ steps.set-matrix.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,10 +39,13 @@ jobs:
           ref: ${{ github.event.client_payload.ref_name}}
 
       - name: Set matrix
-        id: get-matrix
+        id: set-matrix
         run: |
-          MATRIX='123'
-          echo "value=hello" >> "$GITHUB_OUTPUT"
+          MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+          if [[ "$REF_NAME" =~ "pro" ]]; then
+            MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+          fi
+          echo "value=$MATRIX" >> $GITHUB_OUTPUT
 
       - name: Set env
         id: set-env
@@ -65,7 +68,7 @@ jobs:
       - name: Log value
         run: |
           echo "tag-source: $REF_NAME"
-          echo "matrix: ${{ steps.get-matrix.outputs.value }}"
+          echo "matrix: ${{ steps.set-matrix.outputs.value }}"
           echo "message-information: ${{ steps.get-message-information.outputs.value }}"
           # echo "env: ${{ steps.set-env.outputs.value }}"
 
@@ -101,7 +104,6 @@ jobs:
         run: |
           echo "tag-source: $REF_NAME"
           echo "matrix: ${{ needs.init.outputs.matrix }}"
-          echo "env: ${{ needs.init.outputs.env }}"
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
