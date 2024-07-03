@@ -209,6 +209,7 @@ jobs:
           key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
 
       - name: Remove code-push
+        if: needs.init.outputs.env == 'prod'
         shell: bash
         run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
 
