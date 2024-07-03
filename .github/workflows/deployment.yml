@@ -33,7 +33,7 @@ jobs:
     outputs:
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
-      matrix: "123"
+      matrix: ${{ steps.get-message-information.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
