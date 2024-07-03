@@ -40,7 +40,7 @@ jobs:
         id: set-matrix
         run: |
           MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
-          if [[ "$REF_NAME" =~ "prd" ]]; then
+          if [[ "$REF_NAME" =~ "pro" ]]; then
             MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
           fi
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
@@ -49,8 +49,8 @@ jobs:
         id: set-env
         run: |
           ENV='dev'
-          if [[ "$REF_NAME" =~ "prod" ]]; then
-            ENV='prd'
+          if [[ "$REF_NAME" =~ "pro" ]]; then
+            ENV='pro'
           elif [[ "$REF_NAME" =~ "stg" ]]; then
             ENV='stg'
           fi
