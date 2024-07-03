@@ -135,7 +135,11 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        include: ${{ fromJson(needs.init.outputs.matrix) }}
+        include:
+          [
+            { format:"IPA", name:"macos-14", platform:"IOS" },
+            { format:"APK", name:"ubuntu-22.04", platform:"ANDROID" },
+          ]
     runs-on: ${{ matrix.name }}
     needs: [init, prepare]
     timeout-minutes: 60
