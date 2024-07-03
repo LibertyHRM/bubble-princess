@@ -6,7 +6,7 @@ on:
 
 env:
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-  TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+  TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_GROUP_ID }}
   TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
   # ================= NEW FLOW
   NO_FLIPPER: "1"
