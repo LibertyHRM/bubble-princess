@@ -236,7 +236,7 @@ jobs:
         run: bash scripts/change_version_and_build_number.sh
 
       - name: Config environment
-        run: bash scripts/load_build_configure_${{ steps.set-matrix.outputs.value }}.sh
+        run: bash scripts/load_build_configure_${{ needs.init.outputs.env }}.sh
 
       - name: Generate launcher icon
         uses: borales/actions-yarn@v5
