@@ -172,6 +172,7 @@ jobs:
         with:
           java-version: 11
           distribution: "temurin"
+          cache: "gradle"
 
       - name: Setup Android SDK
         if: matrix.platform == 'ANDROID'
@@ -279,17 +280,12 @@ jobs:
         with:
           lane: ios deploy_ipa_${{ needs.init.outputs.env }}
 
-      # - name: Deploy APK to firebase
-      #   if: matrix.format == 'APK'
-      #   uses: maierj/fastlane-action@v3.1.0
-      #   with:
-      #     lane: android deploy_apk_${{ needs.init.outputs.env }}
-
-      - name: Build APK
+      - name: Deploy APK to firebase
         if: matrix.format == 'APK'
-        uses: borales/actions-yarn@v5
+        uses: maierj/fastlane-action@v3.1.0
         with:
-          cmd: cd android && ./gradlew assembleDevelopmentRelease --warning-mode all
+          lane: android deploy_apk_${{ needs.init.outputs.env }}
+
       # - name: Deploy AAB to playstore
       #   if: matrix.format == 'AAB'
       #   uses: maierj/fastlane-action@v3.1.0
