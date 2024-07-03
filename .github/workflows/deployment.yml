@@ -60,26 +60,11 @@ jobs:
           fi
           echo "value=$ENV" >> $GITHUB_OUTPUT
 
-      - name: Generate message
-        id: get-message-information
-        run: |
-          source .github/scripts/utils.sh
-          echo "value=$(get_message_information)" >> "$GITHUB_OUTPUT"
-        timeout-minutes: 1
-
       - name: Log value
         run: |
           echo "tag-source: $REF_NAME"
           echo "matrix: ${{ steps.set-matrix.outputs.value }}"
-          echo "message-information: ${{ steps.get-message-information.outputs.value }}"
           echo "env: ${{ steps.set-env.outputs.value }}"
-
-      - name: Send telegram message
-        if: vars.IS_SILENT != 'true'
-        uses: PacificPromise/macos-telegram-action@main
-        with:
-          type: topic
-          message: "🎬 -  Start build: ${{ steps.get-message-information.outputs.value }}"
 
   prepare:
     name: Prepare ${{ matrix.platform  }}
