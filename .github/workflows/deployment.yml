@@ -17,7 +17,7 @@ env:
   MAIN_REPOSITORY: ${{ secrets.CUCU_REPOSITORY }}
   P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
   PRO_API_KEY_JSON: ${{secrets.PRO_API_KEY_JSON}}
-  API_KEY_JSON: ${{secrets.DEV_API_KEY_JSON}}
+  API_KEY_JSON: ${{secrets.API_KEY_JSON}}
   FIREBASE_CLI_TOKEN: ${{secrets.DEV_FIREBASE_CLI_TOKEN}}
   SSH_PRIVATE_KEY_SDK_CORE_CLIENT: ${{secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT}}
   DYNAMIC_CONSTANTS_TS_PROD_BASE64: ${{secrets.DYNAMIC_CONSTANTS_TS_PROD_BASE64}}
@@ -27,8 +27,8 @@ jobs:
     name: Init
     runs-on: macos-14
     outputs:
-      message-information: ${{ steps.get-message-information.outputs.value }}
-      env: ${{ steps.set-env.outputs.value }}
+      # message-information: ${{ steps.get-message-information.outputs.value }}
+      # env: ${{ steps.set-env.outputs.value }}
       matrix: ${{ steps.set-matrix.outputs.value }}
     steps:
       - name: Checkout
@@ -47,16 +47,16 @@ jobs:
           fi
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
 
-      - name: Set env
-        id: set-env
-        run: |
-          ENV='dev'
-          if [[ "$REF_NAME" =~ "pro" ]]; then
-            ENV='prod'
-          elif [[ "$REF_NAME" =~ "stg" ]]; then
-            ENV='stg'
-          fi
-          echo "value=$ENV" >> $GITHUB_OUTPUT
+      # - name: Set env
+      #   id: set-env
+      #   run: |
+      #     ENV='dev'
+      #     if [[ "$REF_NAME" =~ "pro" ]]; then
+      #       ENV='prod'
+      #     elif [[ "$REF_NAME" =~ "stg" ]]; then
+      #       ENV='stg'
+      #     fi
+      #     echo "value=$ENV" >> $GITHUB_OUTPUT
 
       - name: Generate message
         id: get-message-information
@@ -70,7 +70,7 @@ jobs:
           echo "tag-source: $REF_NAME"
           echo "matrix: ${{ steps.set-matrix.outputs.value }}"
           echo "message-information: ${{ steps.get-message-information.outputs.value }}"
-          echo "env: ${{ steps.set-env.outputs.value }}"
+          # echo "env: ${{ steps.set-env.outputs.value }}"
 
       # - name: Send telegram message
       #   if: vars.IS_SILENT != 'true'
@@ -103,7 +103,7 @@ jobs:
       - name: Log value
         run: |
           echo "tag-source: $REF_NAME"
-          echo "matrix: ${{ needs.init.outputs.matrix }}"
+          echo "matrix: ${{ needs.init.outputs }}"
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
