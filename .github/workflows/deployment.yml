@@ -256,7 +256,7 @@ jobs:
         shell: bash
         run: |
           cat android/app/google-services.json
-          cat $RELEASE_KEYSTORE_BASE64
+
       # NOTE: start build
       - name: Build IPA
         if: matrix.format == 'IPA'
