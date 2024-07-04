@@ -21,7 +21,7 @@ env:
   API_KEY_JSON: ${{ secrets.API_KEY_JSON }}
   PRO_API_KEY_JSON: ${{ secrets.PRO_API_KEY_JSON }}
   PRO_PLAY_STORE_KEY_JSON: ${{ secrets.PRO_PLAY_STORE_KEY_JSON }}
-  RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+  RELEASE_KEYSTORE_BASE64: ${{ vars.RELEASE_KEYSTORE_BASE64 }}
   DYNAMIC_CONSTANTS_TS_PROD_BASE64: ${{ secrets.DYNAMIC_CONSTANTS_TS_PROD_BASE64 }}
   PRO_GOOGLE_SERVICES_JSON: ${{ vars.CUCU_PRO_GOOGLE_SERVICES_JSON }}
   PRO_GOOGLESERVICE_INFO_PLIST: ${{ secrets.CUCU_PRO_GOOGLESERVICE_INFO_PLIST }}
@@ -254,7 +254,9 @@ jobs:
 
       - name: log value
         shell: bash
-        run: cat android/app/google-services.json
+        run: |
+          cat android/app/google-services.json
+          cat $RELEASE_KEYSTORE_BASE64
       # NOTE: start build
       - name: Build IPA
         if: matrix.format == 'IPA'
