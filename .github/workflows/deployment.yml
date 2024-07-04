@@ -26,6 +26,8 @@ env:
   PRO_GOOGLE_SERVICES_JSON: ${{ secrets.CUCU_PRO_GOOGLE_SERVICES_JSON }}
   PRO_GOOGLESERVICE_INFO_PLIST: ${{ secrets.CUCU_PRO_GOOGLESERVICE_INFO_PLIST }}
   SSH_PRIVATE_KEY_SDK_CORE_CLIENT: ${{ secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT }}
+  FIREBASE_CLI_TOKEN: ${{ secrets.DEV_FIREBASE_CLI_TOKEN }}
+  PRO_FIREBASE_CLI_TOKEN: ${{ secrets.PRO_FIREBASE_CLI_TOKEN }}
 
 jobs:
   init:
@@ -35,7 +37,6 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.value }}
       message-information: ${{ steps.get-message-information.outputs.value }}
       env: ${{ steps.set-env.outputs.value }}
-      firbase_cli_token: ${{steps.set-env.outputs.cli_token}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -277,19 +278,8 @@ jobs:
         with:
           lane: ios deploy_ipa_${{ needs.init.outputs.env }}
 
-      - name: Set FIREBASE_CLI_TOKEN environment variable
-        id: set-firebase-cli-token
-        run: |
-          if [ "${{ needs.init.outputs.env }}" == "prod" ]; then
-            echo "FIREBASE_CLI_TOKEN=${{ secrets.PRO_FIREBASE_CLI_TOKEN }}" >> $GITHUB_ENV
-          else
-            echo "FIREBASE_CLI_TOKEN=${{ secrets.DEV_FIREBASE_CLI_TOKEN }}" >> $GITHUB_ENV
-          fi
-
       - name: Deploy APK to firebase
         if: matrix.format == 'APK'
-        env:
-          FIREBASE_CLI_TOKEN: $FIREBASE_CLI_TOKEN
         uses: maierj/fastlane-action@v3.1.0
         with:
           lane: android deploy_apk_${{ needs.init.outputs.env }}
