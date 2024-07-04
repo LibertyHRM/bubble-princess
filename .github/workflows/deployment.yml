@@ -22,7 +22,7 @@ env:
   PRO_API_KEY_JSON: ${{ secrets.PRO_API_KEY_JSON }}
   PRO_PLAY_STORE_KEY_JSON: ${{ secrets.PRO_PLAY_STORE_KEY_JSON }}
   RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
-  DYNAMIC_CONSTANTS_TS_PROD_BASE64: ${{ vars.DYNAMIC_CONSTANTS_TS_PROD_BASE64 }}
+  DYNAMIC_CONSTANTS_TS_PROD_BASE64: ${{ secrets.DYNAMIC_CONSTANTS_TS_PROD_BASE64 }}
   PRO_GOOGLE_SERVICES_JSON: ${{ secrets.CUCU_PRO_GOOGLE_SERVICES_JSON }}
   PRO_GOOGLESERVICE_INFO_PLIST: ${{ secrets.CUCU_PRO_GOOGLESERVICE_INFO_PLIST }}
   SSH_PRIVATE_KEY_SDK_CORE_CLIENT: ${{ secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT }}
@@ -202,10 +202,10 @@ jobs:
           path: node_modules
           key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
 
-      - name: Remove code-push
-        if: needs.init.outputs.env == 'prod'
-        shell: bash
-        run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
+      # - name: Remove code-push
+      #   if: needs.init.outputs.env == 'prod'
+      #   shell: bash
+      #   run: bash scripts/remove_code_push_config.sh && yarn remove react-native-code-push && cd ..
 
       - name: Cache Pods
         if: matrix.platform == 'IOS'
