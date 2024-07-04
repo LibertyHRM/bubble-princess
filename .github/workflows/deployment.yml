@@ -56,10 +56,10 @@ jobs:
         id: set-env
         run: |
           ENV='dev'
-          CLI_TOKEN=${{secrets.DEV_FIREBASE_CLI_TOKEN}}
+          CLI_TOKEN="${{secrets.DEV_FIREBASE_CLI_TOKEN}}"
           if [[ "$REF_NAME" =~ "pro" ]]; then
             ENV='prod'
-            CLI_TOKEN=${{secrets.PRO_FIREBASE_CLI_TOKEN}}
+            CLI_TOKEN="${{secrets.PRO_FIREBASE_CLI_TOKEN}}"
           elif [[ "$REF_NAME" =~ "stg" ]]; then
             ENV='stg'
           fi
