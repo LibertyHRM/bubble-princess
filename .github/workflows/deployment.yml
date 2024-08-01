@@ -164,11 +164,11 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
-      - name: Setup JDK 11
+      - name: Setup JDK 17
         if: matrix.platform == 'ANDROID'
         uses: actions/setup-java@v4
         with:
-          java-version: 11
+          java-version: 17
           distribution: "temurin"
           cache: "gradle"
 
