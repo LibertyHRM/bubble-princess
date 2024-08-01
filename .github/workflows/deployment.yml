@@ -106,7 +106,7 @@ jobs:
       - name: Setup Node v20
         uses: actions/setup-node@v4
         with:
-          node-version-file: "v20.9.0"
+          node-version: "20.9.0"
 
       - name: Cache node_modules
         id: cache-node-modules
