@@ -103,10 +103,10 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           ref: ${{ github.event.client_payload.ref_name}}
 
-      - name: Setup Node v20
+      - name: Setup Node v18
         uses: actions/setup-node@v4
         with:
-          node-version: "20.9.0"
+          node-version-file: ".nvmrc"
 
       - name: Cache node_modules
         id: cache-node-modules
@@ -121,6 +121,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT }}
 
+      - name: Log value
+        run: |
+          yarn --version
       - name: Run yarn install
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: borales/actions-yarn@v5
