@@ -103,10 +103,10 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           ref: ${{ github.event.client_payload.ref_name}}
 
-      - name: Setup Node v18
+      - name: Setup Node v20
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: "v20.9.0"
 
       - name: Cache node_modules
         id: cache-node-modules
