@@ -108,9 +108,10 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
-      - name: Set Yarn 3.6.14
+      - name: Set Yarn 3.6.4
+        shell: bash
         run: |
-          yarn set version 3.14.6
+          yarn set version 3.6.4
 
       - name: Log value
         run: |
