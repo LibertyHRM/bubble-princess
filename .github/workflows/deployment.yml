@@ -117,8 +117,10 @@ jobs:
       - name: Prepare Yarn version from packageManager field
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: |
-          npm install -g yarn@3.6.4
+          corepack enable
+          corepack prepare --activate
           yarn --version
+          yarn set version 3.6.4
           yarn install --frozen-lockfile
 
       - name: Send telegram message failure
@@ -161,8 +163,10 @@ jobs:
 
       - name: Prepare Yarn version from packageManager field
         run: |
-          npm install -g yarn@3.6.4
+          corepack enable
+          corepack prepare --activate
           yarn --version
+          yarn set version 3.6.4
 
       - name: Setup JDK 17
         if: matrix.platform == 'ANDROID'
