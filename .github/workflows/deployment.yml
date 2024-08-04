@@ -117,8 +117,7 @@ jobs:
       - name: Prepare Yarn version from packageManager field
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: |
-          corepack enable
-          corepack prepare --activate
+          npm install -g yarn@3.6.4
           yarn --version
           yarn install --frozen-lockfile
 
@@ -162,8 +161,7 @@ jobs:
 
       - name: Prepare Yarn version from packageManager field
         run: |
-          corepack enable
-          corepack prepare --activate
+          npm install -g yarn@3.6.4
           yarn --version
 
       - name: Setup JDK 17
