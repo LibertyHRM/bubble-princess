@@ -121,7 +121,7 @@ jobs:
           corepack prepare --activate
           yarn --version
           yarn set version 3.6.4
-          yarn install --frozen-lockfile
+          yarn install
 
       - name: Send telegram message failure
         if: ${{ failure() && vars.IS_SILENT != 'true' }}
