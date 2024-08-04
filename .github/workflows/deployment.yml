@@ -167,6 +167,7 @@ jobs:
           corepack prepare --activate
           yarn --version
           yarn set version 3.6.4
+          yarn install
 
       - name: Setup JDK 17
         if: matrix.platform == 'ANDROID'
@@ -244,9 +245,7 @@ jobs:
         run: bash scripts/load_build_configure_${{ needs.init.outputs.env }}.sh
 
       - name: Generate launcher icon
-        uses: borales/actions-yarn@v5
-        with:
-          cmd: appicon:create
+        run: yarn appicon:create
 
       - name: Install certificate and provision
         if: matrix.platform == 'IOS'
