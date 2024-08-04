@@ -109,14 +109,11 @@ jobs:
           node-version-file: ".nvmrc"
           corepack-enable: true
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Prepare Yarn version from packageManager field
-        run: corepack prepare --activate
-
-      - name: Install dependencies
-        run: yarn --version
+        run: |
+          corepack enable
+          corepack prepare --activate
+          yarn --version
 
       - name: Unlock ssh agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -127,7 +124,7 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: borales/actions-yarn@v5
         with:
-          cmd: install --network-concurrency 1
+          cmd: install
 
       - name: Send telegram message failure
         if: ${{ failure() && vars.IS_SILENT != 'true' }}
@@ -161,14 +158,17 @@ jobs:
           ruby-version: "3.0.0"
           bundler-cache: true
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Setup Node v20
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           corepack-enable: true
+
+      - name: Prepare Yarn version from packageManager field
+        run: |
+          corepack enable
+          corepack prepare --activate
+          yarn --version
 
       - name: Setup JDK 17
         if: matrix.platform == 'ANDROID'
