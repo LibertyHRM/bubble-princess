@@ -122,6 +122,7 @@ jobs:
           yarn --version
           yarn set version 3.6.4
           yarn install
+          cd node_modules && ls
 
       - name: Send telegram message failure
         if: ${{ failure() && vars.IS_SILENT != 'true' }}
