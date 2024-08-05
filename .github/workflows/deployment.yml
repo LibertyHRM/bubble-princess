@@ -427,6 +427,14 @@ jobs:
         uses: borales/actions-yarn@v5
         with:
           cmd: install --network-concurrency 1
+      
+                # NOTE: install libs
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
 
       - name: Send telegram message failure
         if: ${{ failure() && vars.IS_SILENT != 'true' }}
