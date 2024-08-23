@@ -426,7 +426,7 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: borales/actions-yarn@v5
         with:
-          cmd: install --network-concurrency 1
+          cmd: install
       
                 # NOTE: install libs
       - name: Cache node_modules
