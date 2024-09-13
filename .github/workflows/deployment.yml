@@ -220,7 +220,7 @@ jobs:
       - name: Pod install
         if: ${{ (matrix.platform == 'IOS') && (steps.cache-pods.outputs.cache-hit != 'true') }}
         working-directory: ios
-        run: pod install
+        run: bundle exec pod install
 
       - name: show Podfile.lock
         run: cat ios/Podfile.lock
